@@ -1,8 +1,8 @@
-# malloc-js
+# wasm-memory-js
 
 Manual memory management for JavaScript powered by WebAssembly.
 
-`malloc-js` brings a familiar C-style memory model to JavaScript. Allocate raw memory blocks, work directly with bytes through TypedArrays, and explicitly free memory when you're done.
+`wasm-memory-js` brings a familiar C-style memory model to JavaScript. Allocate raw memory blocks, work directly with bytes through TypedArrays, and explicitly free memory when you're done.
 
 ## Why?
 
@@ -15,18 +15,19 @@ Sometimes, especially when working with:
 * Video processing
 * Audio processing
 * Custom runtimes
+* Binary protocols
 * Low-level systems experiments
 
 it can be useful to manage memory manually.
 
-`malloc-js` provides a simple API inspired by C's `malloc()` and `free()`.
+`wasm-memory-js` provides a simple API inspired by C's `malloc()` and `free()` while remaining fully usable from JavaScript.
 
 ---
 
 ## Installation
 
 ```bash
-npm install malloc-js
+npm install wasm-memory-js
 ```
 
 ---
@@ -37,7 +38,7 @@ npm install malloc-js
 import {
   allocMemory,
   freeMemory
-} from "malloc-js";
+} from "wasm-memory-js";
 
 const block = allocMemory(100);
 
@@ -68,9 +69,19 @@ returns:
 }
 ```
 
+### Properties
+
+| Property | Description                               |
+| -------- | ----------------------------------------- |
+| ptr      | Pointer/address inside WebAssembly memory |
+| size     | Allocated size in bytes                   |
+| memory   | Uint8Array view over the allocated memory |
+
+---
+
 ## Large Memory Allocations
 
-`malloc-js` is configured with **1 GB of initial WebAssembly memory**, allowing applications to work with large binary datasets and memory-intensive workloads.
+`wasm-memory-js` is configured with **1 GB of WebAssembly memory**, allowing applications to work with large binary datasets and memory-intensive workloads.
 
 Examples:
 
@@ -100,7 +111,7 @@ Typical use cases:
 * Video and audio pipelines
 * WebAssembly runtimes
 * Binary protocols
-* Custom memory allocators
+* Custom allocators
 * Systems programming experiments
 
 ### Notes
@@ -108,19 +119,7 @@ Typical use cases:
 * Actual usable memory depends on available system resources.
 * WebAssembly memory is backed by virtual memory and may not immediately consume physical RAM.
 * Extremely large allocations may still fail if insufficient memory is available.
-* Always free memory when finished:
-
-```js
-freeMemory(block);
-```
-
-### Properties
-
-| Property | Description                               |
-| -------- | ----------------------------------------- |
-| ptr      | Pointer/address inside WebAssembly memory |
-| size     | Allocated size in bytes                   |
-| memory   | Uint8Array view over the allocated memory |
+* Always free memory when finished.
 
 ---
 
@@ -152,7 +151,9 @@ console.log(block.memory[1]);
 const block = allocMemory(100);
 
 const bytes =
-  new TextEncoder().encode("hello");
+  new TextEncoder().encode(
+    "hello"
+  );
 
 block.memory.set(bytes);
 
@@ -207,8 +208,6 @@ does not immediately erase bytes.
 
 It marks the memory as available for future allocations.
 
----
-
 ### Do Not Use Freed Blocks
 
 Bad:
@@ -227,11 +226,48 @@ block.memory[0] = 123;
 freeMemory(block);
 ```
 
+### Ownership vs Data
+
+When memory is freed:
+
+```js
+freeMemory(block);
+```
+
+ownership of the memory is released, but the old bytes may still remain in memory until they are overwritten by a future allocation.
+
+This behavior is similar to C's:
+
+```c
+free(ptr);
+```
+
+and is one of the most important concepts in manual memory management.
+
+---
+
+## TypeScript Support
+
+`wasm-memory-js` ships with built-in TypeScript definitions.
+
+```ts
+import {
+  allocMemory,
+  freeMemory
+} from "wasm-memory-js";
+
+const block = allocMemory(100);
+
+block.memory[0] = 123;
+
+freeMemory(block);
+```
+
 ---
 
 ## Inspiration
 
-`malloc-js` is inspired by:
+`wasm-memory-js` is inspired by:
 
 ```c
 void* ptr = malloc(size);
@@ -242,6 +278,21 @@ free(ptr);
 ```
 
 and brings a similar workflow to JavaScript through WebAssembly.
+
+---
+
+## Educational Purpose
+
+This project was created to help JavaScript developers better understand:
+
+* Memory allocation
+* Pointers
+* Heaps
+* WebAssembly memory
+* Manual memory management
+* Systems programming concepts
+
+through a simple JavaScript API.
 
 ---
 
