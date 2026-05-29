@@ -1,6 +1,6 @@
 {
   "name": "wasm-memory-js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Manual memory management for JavaScript powered by WebAssembly. Allocate memory blocks, access raw bytes, and explicitly free memory using a C-style API.",
   "keywords": [
     "memory",
