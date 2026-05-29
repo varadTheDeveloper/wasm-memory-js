@@ -1,16 +1,60 @@
 {
   "name": "malloc-js",
-  "version": "1.0.0",
-  "main": "index.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1.0",
+  "description": "Manual memory management for JavaScript powered by WebAssembly. Allocate memory blocks, access raw bytes, and explicitly free memory using a C-style API.",
+  "keywords": [
+    "memory",
+    "malloc",
+    "free",
+    "wasm",
+    "webassembly",
+    "heap",
+    "pointer",
+    "manual-memory",
+    "low-level",
+    "typedarray"
+  ],
+  "homepage": "https://github.com/varadTheDeveloper/malloc-js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/varadTheDeveloper/malloc-js.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
+  "bugs": {
+    "url": "https://github.com/varadTheDeveloper/malloc-js/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Varad Modhekar",
+    "email": "varadmodhekar@gmail.com",
+    "url": "https://github.com/varadTheDeveloper"
+  },
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
+  "files": [
+    "src",
+    "index.js",
+    "index.d.ts",
+    "runtime.js",
+    "runtime.wasm",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "echo \"No tests yet\"",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
     "typescript": "^6.0.3"
   }
 }

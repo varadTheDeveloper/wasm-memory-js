@@ -68,6 +68,52 @@ returns:
 }
 ```
 
+## Large Memory Allocations
+
+`malloc-js` is configured with **1 GB of initial WebAssembly memory**, allowing applications to work with large binary datasets and memory-intensive workloads.
+
+Examples:
+
+```js
+const block = allocMemory(
+  1024 * 1024 * 100
+); // 100 MB
+```
+
+```js
+const block = allocMemory(
+  1024 * 1024 * 1024
+); // 1 GB
+```
+
+Check the current WebAssembly memory size:
+
+```js
+console.log(
+  block.memory.buffer.byteLength
+);
+```
+
+Typical use cases:
+
+* Large file processing
+* Video and audio pipelines
+* WebAssembly runtimes
+* Binary protocols
+* Custom memory allocators
+* Systems programming experiments
+
+### Notes
+
+* Actual usable memory depends on available system resources.
+* WebAssembly memory is backed by virtual memory and may not immediately consume physical RAM.
+* Extremely large allocations may still fail if insufficient memory is available.
+* Always free memory when finished:
+
+```js
+freeMemory(block);
+```
+
 ### Properties
 
 | Property | Description                               |
