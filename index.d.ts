@@ -11,3 +11,4 @@ export declare function allocMemory(
 export declare function freeMemory(
   block: MemoryBlock
 ): void;
+export declare const HEAP: Uint8Array;
